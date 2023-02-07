@@ -1,7 +1,16 @@
+from typing import Union
+
+# 联合类型
+my_list: list[Union[str, int]] = [1, 2, "haha"]
+my_dict: dict[str, Union[str, int]] = {"name": "张三", "age": 18}
+
+
 class Student:
-    name = None
-    age = None
-    __sex = None
+    name: str = None
+    age: int = None
+    __sex = None  # type: str
+    my_set = None  # type: set
+    my_dict: dict[str, int] = {"a": 1}
 
     def __private_method(self):
         print("hello,this is __private_method")
@@ -9,7 +18,7 @@ class Student:
     def sayHello(self):
         self.__private_method()
 
-    def __init__(self, name, age):
+    def __init__(self, name: Union[str, int], age: int):
         self.name = name
         self.age = age
         self.__sex = "男"
@@ -24,8 +33,12 @@ class Student:
         return (self.name == other.name) & (self.age == other.age)
 
 
-# 继承
-class JuniorStudent(Student):
+class People:
+    address = None
+
+
+# 继承   多继承优先级从左到右
+class JuniorStudent(Student, People):
     major_class = None
 
     def __init__(self, name, age, major):
@@ -34,11 +47,17 @@ class JuniorStudent(Student):
         self.__sex = "男"
         self.major = major
 
-    def print_major_class(self):
+    def print_major_class(self) -> None:
+        Student.sayHello(self)
+        print(super().age)
         print(f"我的主修课程是{self.major_class}")
 
 
-student1 = Student("张三", 18)
+class JuniorStudent2(Student, People):
+    pass  # 占位语句，仅仅为了保证完整性
+
+
+student1: Student = Student("张三", 18)
 print(student1)
 
 student2 = Student("李四", 20)
